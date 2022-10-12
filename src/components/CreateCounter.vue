@@ -8,25 +8,27 @@ defineComponent({ name: "CreateCounter" });
 .column.justify-evenly
   .row.justify-center
     .column.col-4
-      q-btn.q-ma-xs.bg-teal-13(
+      q-btn.q-ma-xs(
         rounded,
         dense,
         no-caps,
+        color = "red",
         size="0.9em",
         icon="add",
         label="Create a new counter",
         @click = "syncToServer"
         )
-        q-tooltip(anchor="bottom left").bg-teal update server values
+        q-tooltip(anchor="bottom left").bg-teal Create a new counter
     .column.col-5
-      q-btn.q-ma-xs.bg-teal-13(
+      q-btn.q-ma-xs(
         rounded,
         dense,
         no-caps,
+        color = "green",
         size="0.9em",
         icon="sync",
         label="Pull shared counters",
         @click = "syncFromServer"
         )
-        q-tooltip(anchor="bottom right").bg-teal update local values from server
+        q-tooltip(anchor="bottom right").bg-teal Pull shared counters
 </template>

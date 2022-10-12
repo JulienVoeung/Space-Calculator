@@ -1,15 +1,15 @@
 <script setup>
-import { defineComponent, ref } from 'vue'
-import CounterComponent from '../components/CounterComponent.vue';
-import CountersTotal from '../components/CountersTotal.vue';
-import useAuthUser from 'src/composables/UseAuthUser';
-import CreateCounter from 'src/components/CreateCounter.vue';
+import { defineComponent, ref } from "vue";
+import CounterComponent from "../components/CounterComponent.vue";
+import CountersTotal from "../components/CountersTotal.vue";
+import useAuthUser from "src/composables/UseAuthUser";
+import CreateCounter from "src/components/CreateCounter.vue";
 
 defineComponent({
-  name: 'IndexPage'
-})
+  name: "IndexPage",
+});
 
-const { user } = useAuthUser()
+const { user } = useAuthUser();
 </script>
 
 <template lang="pug">
