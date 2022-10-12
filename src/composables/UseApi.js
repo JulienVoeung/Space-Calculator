@@ -10,9 +10,10 @@ export default function useAPI(letter) {
   const syncToServer = async () => {
     const counterValue = state.getVal(letter);
     const { data, error } = await supabase
-      .from("counters")
-      .update({ counter: counterValue })
-      .match({ letter: letter, user: user.value.id });
+    .from('counters')
+    .insert([
+      { owner: user.value.id, name: letter, value: counterValue},
+    ])
     if (error) throw error;
   };
 
@@ -20,11 +21,11 @@ export default function useAPI(letter) {
     //let counterValue = null;
     const { data, error } = await supabase
       .from("counters")
-      .select('counter')
-      .match({ letter: letter, user: user.value.id });
+      .select('value')
+      .match({ name: letter, owner: user.value.id });
     if (error) throw error;
     if (data && data.length === 1) {
-      state.setVal(letter, data[0].counter);
+      state.setVal(letter, data[0].value);
     }
   };
 
