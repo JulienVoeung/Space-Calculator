@@ -25,6 +25,17 @@ const counterValue = toRef(state, "counter" + props.id);
 <template lang="pug">
 .column.justify-evenly
   p.q-ma-md.text-h5.text-purple-9.self-center Counter {{ id }}
+    q-btn.q-ma-xs(
+          color="red",
+          rounded,
+          :disabled="!isSignedIn",
+          no-caps,
+          size="0.6em",
+          icon="delete",
+          label="Delete Counter",
+          @click = ""
+          )
+          q-tooltip(anchor="bottom left").bg-teal Delete counter
   .row.justify-center.items-end
     q-btn.q-ma-md.col-1(rounded, color="cyan", @click="state.incr(id)")
       q-tooltip(anchor="top left").bg-teal increment
@@ -45,27 +56,28 @@ const counterValue = toRef(state, "counter" + props.id);
       q-icon(name="arrow_drop_down", size="md")
   .row.justify-center
     .column.col-4
-      q-btn.q-ma-xs.bg-teal-13(
+      q-btn.q-ma-xs(
         rounded,
+        color="orange"
         :disabled="!isSignedIn",
         dense,
         no-caps,
         size="0.9em",
-        icon="cloud_upload",
-        label="Sync to Server",
-        @click = "syncToServer"
-        )
-        q-tooltip(anchor="bottom left").bg-teal update server values
-    .column.col-5
-      q-btn.q-ma-xs.bg-teal-13(
-        rounded,
-        :disabled="!isSignedIn",
-        dense,
-        no-caps,
-        size="0.9em",
-        icon="cloud_download",
-        label="Sync from Server",
+        icon="share",
+        label="Share counter",
         @click = "syncFromServer"
         )
-        q-tooltip(anchor="bottom right").bg-teal update local values from server
+        q-tooltip(anchor="bottom right").bg-teal Share counter
+    .column.col-5
+      q-btn.q-ma-xs.bg-teal-13(
+          rounded,
+          :disabled="!isSignedIn",
+          dense,
+          no-caps,
+          size="0.9em",
+          icon="cloud_upload",
+          label="Sync local to Server",
+          @click = "syncToServer"
+          )
+          q-tooltip(anchor="bottom left").bg-teal update server values
 </template>
