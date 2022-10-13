@@ -1,4 +1,3 @@
-import { ref } from "vue";
 import useAuthUser from "src/composables/UseAuthUser";
 import useSupabase from "src/boot/supabase";
 import { state } from "src/stores/countersState";
@@ -39,8 +38,19 @@ export default function useAPI(letter) {
     }
   };
 
-  return {
-    syncFromServer,
-    syncToServer,
+  const getCounterId = async (letter) => {
+    const { data, error } = await supabase
+      .from("counters")
+      .select('counter_id')
+      .match({ name: letter, owner: user.value.id });
+      if (error) throw error;
+      if (!(data.length > 0)) return "This counter has not been synced yet.";
+    return data[0].counter_id;
+    };
+
+    return {
+      syncFromServer,
+      syncToServer,
+      getCounterId
+    }
   }
-}

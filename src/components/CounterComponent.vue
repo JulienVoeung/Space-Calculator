@@ -3,6 +3,7 @@ import { defineComponent, toRef } from "vue";
 import { state } from "../stores/countersState";
 import useAuthUser from "src/composables/UseAuthUser";
 import useAPI from "src/composables/UseApi";
+import { ref } from 'vue';
 
 defineComponent({ name: "CounterComponent" });
 
@@ -17,9 +18,16 @@ const props = defineProps({
   },
 });
 
-const { syncFromServer, syncToServer } = useAPI(props.id);
+const { syncToServer, getCounterId } = useAPI(props.id);
 
 const counterValue = toRef(state, "counter" + props.id);
+
+async function counterId(letter) {
+  document.getElementById("counterIdField").innerHTML = await getCounterId(letter)
+}
+
+const alert = ref(false);
+
 </script>
 
 <template lang="pug">
@@ -65,9 +73,20 @@ const counterValue = toRef(state, "counter" + props.id);
         size="0.9em",
         icon="share",
         label="Share counter",
-        @click = "syncFromServer"
+        @click = "alert = true"
         )
         q-tooltip(anchor="bottom right").bg-teal Share counter
+        q-dialog(v-model='alert')
+          q-card
+            q-card-section
+              .text-h6 Share this counter
+            q-card-section.q-pt-none
+              | Share the below code with anyone so he can import your counter.
+              q-field(filled='' label='Counter ID' stack-label='' id="counterIdField")
+                template(v-slot:control)
+                  .self-center.full-width.no-outline(tabindex='0') {{ counterId(id) }}
+            q-card-actions(align='right')
+              q-btn(flat='' label='OK' color='primary' v-close-popup='')
     .column.col-5
       q-btn.q-ma-xs.bg-teal-13(
           rounded,
