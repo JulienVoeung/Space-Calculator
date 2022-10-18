@@ -1,46 +1,34 @@
 import { reactive } from "vue"
 
 export const state = reactive({
-  counterA: 0,
-  counterB: 0,
+  // Declare dictionary to store IDs as keys and values as values
+  counters: {},
 
   getVal(id) {
-    if (id === "A") {
-      return this.counterA;
-    } else if (id === "B") {
-      return this.counterB;
-    } else {
-      console.log("Attempting to get a non-existing counter");
-      return 0;
-    }
+    return this.counters[id];
   },
 
   setVal(id, value) {
-    if (id === "A") {
-      this.counterA = value
-      return this.counterA
-    } else if (id === "B") {
-      this.counterB = value
-      return this.counterB
-    } else {
-      console.log("Attempting to set a non-existing counter");
-      return 0;
-    }
+    this.counters[id] = value;
   },
 
   incr(id) {
-    if (id === "A") {
-      this.counterA++;
-    } else if (id === "B") {
-      this.counterB++;
-    } else console.log("Attempting to increment a non-existing counter");
+    this.counters[id]++;
   },
 
   decr(id) {
-    if (id === "A") {
-      this.counterA--;
-    } else if (id === "B") {
-      this.counterB--;
-    } else console.log("Attempting to decrement a non-existing counter");
+    this.counters[id]--;
+  },
+
+  addCounter(id) {
+    this.counters[id] = 0;
+  },
+
+  getTotal(){
+    var total = 0;
+    for(var key in this.counters) {
+      total += this.counters[key];
+    }
+    return total;
   },
 })

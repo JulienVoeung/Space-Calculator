@@ -3,7 +3,7 @@ import { defineComponent, computed } from "vue";
 import { state } from "../stores/countersState";
 
 defineComponent({ name: "CountersTotal" })
-let total = computed(() => state.getVal("A") + state.getVal("B"));
+let total = computed(() => state.getTotal());
 </script>
 
 <template lang="pug">

@@ -13,14 +13,16 @@ const props = defineProps({
   id: {
     required: true,
     validator(value) {
-      return ["A", "B"].includes(value);
+      return value;
     },
   },
 });
 
 const { syncToServer, getCounterId } = useAPI(props.id);
 
-const counterValue = toRef(state, "counter" + props.id);
+state.addCounter(props.id);
+
+const counterValue = toRef(state, "counters")
 
 async function counterId(letter) {
   document.getElementById("counterIdField").innerHTML = await getCounterId(letter)
@@ -49,7 +51,7 @@ const alert = ref(false);
       q-tooltip(anchor="top left").bg-teal increment
       q-icon(name="arrow_drop_up", size="md")
     q-input.col-8(
-      v-model.number="counterValue",
+      v-model="counterValue[id]",
       placeholder="Enter number",
       error-message = "Input must be a number",
       outlined,
