@@ -36,6 +36,10 @@ export const state = reactive({
       Notify.create({message: `Counter '${id}' has been successfully created.`, group:"true", type:"positive", progress:true, closeBtn:true, timeout: 2000})
       return;
     }
+    if(this.isDisplayed.includes(id)){
+      Notify.create({message: `Counter '${id}' already exist.`, group:"true", type:"info", progress:true, closeBtn:true, timeout: 2000})
+      return;
+    }
     this.counters[id] = 0;
     this.lastCreated = id;
     Notify.create({message: `Counter '${id}' has been successfully created.`, group:"true", type:"positive", progress:true, closeBtn:true, timeout: 2000})
