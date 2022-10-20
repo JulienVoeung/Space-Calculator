@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import useAuthUser from "src/composables/UseAuthUser";
 import useNotify from "src/composables/UseNotify";
+import { state } from "src/stores/countersState";
 
 defineComponent({ name: "RoutingTabs" });
 
@@ -10,14 +11,13 @@ const router = useRouter();
 const { isSignedIn, signOut, user } = useAuthUser();
 const { notifyError, notifySuccess } = useNotify();
 
-console.log(`isSignedIn: ${isSignedIn}`);
-
 const handleSignOut = async () => {
   try {
     const oldUser = await signOut();
     notifySuccess(`Successful sign out as ${oldUser.email}!`);
     console.log(`isSignedIn: ${isSignedIn}`);
     router.push({ name: "home" });
+    state.signOutCleaning();
   } catch (error) {
     notifyError(error.message);
   }
