@@ -27,7 +27,6 @@ export default function useAPI(letter) {
   };
 
   const syncFromServer = async () => {
-    //let counterValue = null;
     const { data, error } = await supabase
       .from("counters")
       .select('value')
@@ -48,9 +47,19 @@ export default function useAPI(letter) {
     return data[0].counter_id;
     };
 
+
+  const deleteCounter = async (letter) => {
+    const { data, error } = await supabase
+      .from("counters")
+      .delete()
+      .match({ name: letter, owner: user.value.id });
+      if (error) throw error;
+    };
+
     return {
       syncFromServer,
       syncToServer,
-      getCounterId
+      getCounterId,
+      deleteCounter,
     }
   }
