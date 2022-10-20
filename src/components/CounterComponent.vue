@@ -1,13 +1,9 @@
 <script setup>
-import { defineComponent, toRef } from "vue";
+import { defineComponent } from "vue";
 import { state } from "../stores/countersState";
 import useAuthUser from "src/composables/UseAuthUser";
 import useAPI from "src/composables/UseApi";
 import { ref } from 'vue';
-
-defineComponent({ name: "CounterComponent" });
-
-const { isSignedIn } = useAuthUser();
 
 const props = defineProps({
   id: {
@@ -18,32 +14,45 @@ const props = defineProps({
   },
 });
 
-const { syncToServer, getCounterId } = useAPI(props.id);
+defineComponent({ name: "CounterComponent" });
 
-state.addCounter(props.id);
+const { isSignedIn } = useAuthUser();
 
-const counterValue = toRef(state, "counters")
+// if props.id is defined, use it, if not, use the counters
+const id =  props.id == null ? state.lastCreated : props.id;
+const isShared = state.isShared[id] ? "*Shared Counter*" : 'Counter';
 
-async function counterId(letter) {
-  document.getElementById("counterIdField").innerHTML = await getCounterId(letter)
-}
-
+const { syncToServer, getCounterId, deleteCounter } = useAPI(id);
 const alert = ref(false);
 
+async function counterId(letter) {
+  document.getElementById("counterIdField").innerHTML = await getCounterId(letter);
+}
 </script>
 
 <template lang="pug">
 .column.justify-evenly
-  p.q-ma-md.text-h5.text-purple-9.self-center Counter {{ id }}
-    q-btn.q-ma-xs(
+  p.q-ma-md.text-h5.text-purple-9.self-center.row
+    //- q-icon.q-mr-xl.q-mt-md(
+    //-       name="autorenew",
+    //-       color="red",
+    //-       rounded,
+    //-       size="s",
+    //-       icon="autorenew",
+    //-       ) SYNC
+    //- q-card(style="background-color: red;")
+    //-   q-card-actions.q-mt-xs SYNC
+    //-     q-icon(name="autorenew")
+    p.q-mt-md {{isShared + " " + id }}
+    q-btn.q-ma-xs.q-pa-xs.q-px-md(
           color="red",
           rounded,
           :disabled="!isSignedIn",
           no-caps,
-          size="0.6em",
+          size="0.5em",
           icon="delete",
           label="Delete Counter",
-          @click = ""
+          @click = "state.deleteCounter(id); deleteCounter(id)"
           )
           q-tooltip(anchor="bottom left").bg-teal Delete counter
   .row.justify-center.items-end
@@ -51,7 +60,7 @@ const alert = ref(false);
       q-tooltip(anchor="top left").bg-teal increment
       q-icon(name="arrow_drop_up", size="md")
     q-input.col-8(
-      v-model="counterValue[id]",
+      v-model="state.counters[id]",
       placeholder="Enter number",
       error-message = "Input must be a number",
       outlined,
@@ -69,7 +78,7 @@ const alert = ref(false);
       q-btn.q-ma-xs(
         rounded,
         color="orange"
-        :disabled="!isSignedIn",
+        :disabled="!isSignedIn || state.isShared[id]",
         dense,
         no-caps,
         size="0.9em",
@@ -92,12 +101,13 @@ const alert = ref(false);
     .column.col-5
       q-btn.q-ma-xs.bg-teal-13(
           rounded,
-          :disabled="!isSignedIn",
+          :disabled="!isSignedIn || state.isShared[id]",
           dense,
           no-caps,
           size="0.9em",
           icon="cloud_upload",
           label="Sync local to Server",
+
           @click = "syncToServer"
           )
           q-tooltip(anchor="bottom left").bg-teal update server values
