@@ -56,7 +56,7 @@ async function counterId(letter) {
           )
           q-tooltip(anchor="bottom left").bg-teal Delete counter
   .row.justify-center.items-end
-    q-btn.q-ma-md.col-1(rounded, color="cyan", @click="state.incr(id)")
+    q-btn.q-ma-md.col-1(rounded, color="cyan", @click="state.incr(id)", :disabled="state.isShared[id]")
       q-tooltip(anchor="top left").bg-teal increment
       q-icon(name="arrow_drop_up", size="md")
     q-input.col-8(
@@ -70,7 +70,7 @@ async function counterId(letter) {
       :rules="[val => (Number.isFinite(val)) || 'error']"
       )
       q-tooltip(anchor="bottom middle").bg-teal Enter number
-    q-btn.q-ma-md.col-1(rounded, color="cyan", @click="state.decr(id)")
+    q-btn.q-ma-md.col-1(rounded, color="cyan", @click="state.decr(id)", :disabled="state.isShared[id]")
       q-tooltip(anchor="top right").bg-teal decrement
       q-icon(name="arrow_drop_down", size="md")
   .row.justify-center
