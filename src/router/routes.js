@@ -20,6 +20,21 @@ const routes = [
         component: () => import("src/pages/SignUpPage.vue"),
       },
       {
+        name: "forgotPasswordPage",
+        path: "forgotPasswordPage",
+        component: () => import("src/pages/ForgotPasswordPage.vue"),
+      },
+      {
+        name: "forgotPasswordConfirmationPage",
+        path: "forgotPasswordConfirmationPage",
+        component: () => import("src/pages/ForgotPasswordConfirmation.vue"),
+      },
+      {
+        name: "resetPasswordPage",
+        path: "resetPasswordPage",
+        component: () => import("src/pages/ResetPasswordPage.vue"),
+      },
+      {
         name: "emailConfirmationPage",
         path: "emailConfirmationPage/:email",
         props: true,
