@@ -21,7 +21,7 @@ const { isSignedIn } = useAuthUser();
 const id =  props.id == null ? state.lastCreated : props.id;
 const isShared = state.isShared[id] ? "*Shared Counter*" : 'Counter';
 
-const { syncToServer, getCounterId, deleteCounter } = useAPI(id);
+const { syncToServer, getCounterId, deleteCounter, syncFromServer } = useAPI(id);
 const alert = ref(false);
 
 const isSynced = computed(() => state.isSynced[id]);
@@ -62,11 +62,21 @@ async function counterId(letter) {
       :rules="[val => (Number.isFinite(val)) || 'error']"
       )
       q-tooltip(anchor="bottom middle").bg-teal Enter number
+      q-btn.q-ma-xs(
+        :id="'reset_' + id",
+        rounded,
+        outline,
+        dense,
+        no-caps,
+        @click="state.setVal(id, 0)"
+        icon="clear",
+        size="0.9em",
+        )
     q-btn.q-ma-md.col-1(rounded, color="blue", @click="state.decr(id)", :disabled="state.isShared[id]")
       q-tooltip(anchor="top right").bg-teal decrement
       q-icon(name="arrow_drop_down", size="md")
   .row.justify-center
-    .column.col-2
+    .column.col-3
       q-btn.q-ma-xs.bg-orange-5(
         rounded,
         :disabled="!isSignedIn || state.isShared[id] || !isSynced",
@@ -88,7 +98,7 @@ async function counterId(letter) {
                   .self-center.full-width.no-outline(tabindex='0') {{ counterId(id) }}
             q-card-actions(align='right')
               q-btn(flat='' label='OK' color='primary' v-close-popup='')
-    .column.col-2(v-if="isSynced")
+    .column.col-3(v-if="isSynced")
       q-btn.q-ma-xs.bg-green-7(
           rounded,
           :disabled="!isSignedIn || state.isShared[id]",
@@ -98,8 +108,8 @@ async function counterId(letter) {
           icon="cloud_upload",
           @click = "syncToServer"
           )
-          q-tooltip(anchor="bottom left").bg-teal Update server values
-    .column.col-2(v-else)
+          q-tooltip(anchor="bottom left").bg-teal Update server value
+    .column.col-3(v-else)
       q-btn.q-ma-xs.bg-orange-5(
           rounded,
           :disabled="!isSignedIn || state.isShared[id]",
@@ -110,16 +120,49 @@ async function counterId(letter) {
           @click = "syncToServer"
           )
           q-tooltip(anchor="bottom left").bg-teal Click to sync with server
+    .column.col-3(v-if="isSynced")
+      q-btn.q-ma-xs.bg-green-7(
+          rounded,
+          :disabled="!isSignedIn || state.isShared[id]",
+          dense,
+          no-caps,
+          size="1em",
+          icon="cloud_download",
+          @click = "syncFromServer"
+          )
+          q-tooltip(anchor="bottom left").bg-teal Get value from server
+    .column.col-3(v-else)
+      q-btn.q-ma-xs.bg-orange-5(
+          rounded,
+          :disabled="!isSignedIn || state.isShared[id] || !isSynced",
+          dense,
+          no-caps,
+          size="1em",
+          icon="cloud_download",
+          @click = "syncFromServer"
+          )
+          q-tooltip(anchor="bottom left").bg-teal Get value from server
+  .row.justify-center
     .column.col-2
       q-btn.q-ma-xs.bg-blue-6(
-        :id="'reset_' + id",
+        :id="'save_' + id",
         rounded,
         dense,
         no-caps,
-        @click="state.setVal(id, 0)"
-        icon="restart_alt",
-        size="1em"
+        @click="state.saveValueToLocalStorage(id)",
+        icon="save",
+        size="1em",
         )
-        q-tooltip(anchor="bottom left").bg-teal Reset Counter value
-
+        q-tooltip(anchor="bottom left").bg-teal Save to local storage
+    .column.col-2
+      q-btn.q-ma-xs.bg-blue-6(
+        :id="'load_' + id",
+        rounded,
+        dense,
+        no-caps,
+        @click="state.getFromLocalStorage(id)",
+        icon="settings_backup_restore",
+        size="1em",
+        )
+        q-tooltip(anchor="bottom left").bg-teal Load from local storage
 </template>

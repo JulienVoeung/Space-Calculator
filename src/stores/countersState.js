@@ -93,6 +93,16 @@ export const state = reactive({
     this.lastCreated = "";
   },
 
+  saveValueToLocalStorage(id) {
+    localStorage.setItem(id, this.getVal(id));
+    Notify.create({message: `Counter '${id}' has been saved to local storage.`, group:"true", type:"positive", progress:true, closeBtn:true, timeout: 1000});
+  },
+
+  getFromLocalStorage(id) {
+    this.setVal(id, parseInt(localStorage.getItem(id)));
+  },
+
+
   getTotal(){
     var total = 0;
     for(var key in this.counters) {
