@@ -13,17 +13,21 @@ export default function useAPI(letter) {
     .insert([
       { owner: user.value.id, name: letter, value: counterValue},
     ])
-    if (error.code == 23505){ // means if this counter already exists
-      const { data, error } = await supabase
-      .from('counters')
-      .update({ value: counterValue })
-      .eq('name', letter)
-      .eq('owner', user.value.id);
-      if (error) throw error;
+    if (error){
+      if (error.code == 23505){ // means if this counter already exists
+        const { data, error } = await supabase
+        .from('counters')
+        .update({ value: counterValue })
+        .eq('name', letter)
+        .eq('owner', user.value.id);
+        if (error) throw error;
+        return;
+      }
+      else{
+        throw error;
+      }
     }
-    else{
-      throw error;
-    }
+    state.isSynced[letter] = true;
   };
 
   const syncFromServer = async () => {

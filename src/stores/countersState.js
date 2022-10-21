@@ -5,6 +5,7 @@ export const state = reactive({
   // Declare dictionary to store IDs as keys and values as values
   counters: {},
   isShared: {},
+  isSynced: {},
   isDisplayed: [],
   isRemoved: [],
   fetchResult: [],
@@ -26,13 +27,13 @@ export const state = reactive({
     this.counters[id]--;
   },
 
-  addCounter(id) {
+  addCounter(id, isSynced = false) {
     if (id == ''){
       Notify.create({message: `You must specify a counter name.`, group:"true", type:"negative", progress:true, closeBtn:true, timeout: 3000})
       return;
     }
     if(this.isRemoved.includes(id)){
-      this.renew(id);
+      this.renew(id, isSynced);
       Notify.create({message: `Counter '${id}' has been successfully created.`, group:"true", type:"positive", progress:true, closeBtn:true, timeout: 2000})
       return;
     }
@@ -41,14 +42,16 @@ export const state = reactive({
       return;
     }
     this.counters[id] = 0;
+    this.isSynced[id] = isSynced;
     this.lastCreated = id;
     Notify.create({message: `Counter '${id}' has been successfully created.`, group:"true", type:"positive", progress:true, closeBtn:true, timeout: 2000})
   },
 
-  renew(id){
-    let b = this.isRemoved.findIndex(value => value === id)
-    this.isRemoved.splice(b, 1)
+  renew(id, isSynced){
+    let index = this.isRemoved.findIndex(value => value === id)
+    this.isRemoved.splice(index, 1)
     this.lastCreated = id;
+    this.isSynced[id] = isSynced;
   },
 
   addShared(id) {
@@ -60,6 +63,7 @@ export const state = reactive({
     this.isDisplayed.splice(index, 1);
     this.isRemoved.push(id);
     this.counters[id] = 0;
+    delete this.isSynced[id];
   },
 
   addDisplayed(id){
@@ -82,6 +86,7 @@ export const state = reactive({
   signOutCleaning(){
     this.counters = Object.create(null);
     this.isShared = Object.create(null);
+    this.isSynced = Object.create(null);
     this.isDisplayed = [];
     this.isRemoved = [];
     this.fetchResult = [];

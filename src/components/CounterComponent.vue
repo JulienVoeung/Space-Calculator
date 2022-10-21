@@ -1,9 +1,8 @@
 <script setup>
-import { defineComponent } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { state } from "../stores/countersState";
 import useAuthUser from "src/composables/UseAuthUser";
 import useAPI from "src/composables/UseApi";
-import { ref } from 'vue';
 
 const props = defineProps({
   id: {
@@ -25,6 +24,8 @@ const isShared = state.isShared[id] ? "*Shared Counter*" : 'Counter';
 const { syncToServer, getCounterId, deleteCounter } = useAPI(id);
 const alert = ref(false);
 
+const isSynced = computed(() => state.isSynced[id]);
+
 async function counterId(letter) {
   document.getElementById("counterIdField").innerHTML = await getCounterId(letter);
 }
@@ -33,16 +34,6 @@ async function counterId(letter) {
 <template lang="pug">
 .column.justify-evenly
   p.q-ma-md.text-h5.text-purple-9.self-center.row
-    //- q-icon.q-mr-xl.q-mt-md(
-    //-       name="autorenew",
-    //-       color="red",
-    //-       rounded,
-    //-       size="s",
-    //-       icon="autorenew",
-    //-       ) SYNC
-    //- q-card(style="background-color: red;")
-    //-   q-card-actions.q-mt-xs SYNC
-    //-     q-icon(name="autorenew")
     p.q-mt-md {{isShared + " " + id }}
     q-btn.q-ma-xs.q-pa-xs.q-px-md(
           color="red",
@@ -75,10 +66,9 @@ async function counterId(letter) {
       q-icon(name="arrow_drop_down", size="md")
   .row.justify-center
     .column.col-4
-      q-btn.q-ma-xs(
+      q-btn.q-ma-xs.bg-orange-5(
         rounded,
-        color="orange"
-        :disabled="!isSignedIn || state.isShared[id]",
+        :disabled="!isSignedIn || state.isShared[id] || !isSynced",
         dense,
         no-caps,
         size="0.9em",
@@ -98,17 +88,30 @@ async function counterId(letter) {
                   .self-center.full-width.no-outline(tabindex='0') {{ counterId(id) }}
             q-card-actions(align='right')
               q-btn(flat='' label='OK' color='primary' v-close-popup='')
-    .column.col-5
-      q-btn.q-ma-xs.bg-teal-13(
+    .column.col-5(v-if="isSynced")
+      q-btn.q-ma-xs.bg-green-7(
           rounded,
           :disabled="!isSignedIn || state.isShared[id]",
           dense,
           no-caps,
           size="0.9em",
           icon="cloud_upload",
-          label="Sync local to Server",
+          label="Update server value",
 
           @click = "syncToServer"
           )
-          q-tooltip(anchor="bottom left").bg-teal update server values
+          q-tooltip(anchor="bottom left").bg-teal Update server values
+    .column.col-5(v-else)
+      q-btn.q-ma-xs.bg-orange-5(
+          rounded,
+          :disabled="!isSignedIn || state.isShared[id]",
+          dense,
+          no-caps,
+          size="0.9em",
+          icon="cloud_upload",
+          label="Not synced yet",
+
+          @click = "syncToServer"
+          )
+          q-tooltip(anchor="bottom left").bg-teal Click to sync with server
 </template>
