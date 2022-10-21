@@ -68,7 +68,7 @@ function subscribe(counterName, counterId) {
         rounded,
         dense,
         no-caps,
-        color = "red",
+        color = "blue",
         size="0.9em",
         icon="add",
         label="Create a new counter",
@@ -90,7 +90,7 @@ function subscribe(counterName, counterId) {
         no-caps,
         color = "green",
         size="0.9em",
-        icon="sync",
+        icon="file_download",
         label="Import counter",
         @click = "importCounterDialog = true"
         )

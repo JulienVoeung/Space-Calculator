@@ -1,6 +1,7 @@
 import useAuthUser from "src/composables/UseAuthUser";
 import useSupabase from "src/boot/supabase";
 import { state } from "src/stores/countersState";
+import { Notify } from 'quasar'
 
 export default function useAPI(letter) {
   const { supabase } = useSupabase();
@@ -21,6 +22,7 @@ export default function useAPI(letter) {
         .eq('name', letter)
         .eq('owner', user.value.id);
         if (error) throw error;
+        Notify.create({message: `Counter '${letter}' has been successfully updated.`, group:"true", type:"positive", progress:true, closeBtn:false, timeout: 1000})
         return;
       }
       else{
@@ -28,6 +30,7 @@ export default function useAPI(letter) {
       }
     }
     state.isSynced[letter] = true;
+    Notify.create({message: `Counter '${letter}' has been successfully synced with server.`, group:"true", type:"positive", progress:true, closeBtn:false, timeout: 1000})
   };
 
   const syncFromServer = async () => {
