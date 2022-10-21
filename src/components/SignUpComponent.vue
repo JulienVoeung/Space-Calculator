@@ -46,10 +46,10 @@ q-form.row.justify-center(@submit.prevent="handleSignUp")
     InputEmailComponent(v-model="form.email")
     InputPasswordComponent(v-model="form.password")
     .full-width.q-pt-md.q-gutter-y-sm
-      q-btn.full-width(
+      q-btn.bg-purple-9.full-width(
         label="Sign Up",
-        color="primary",
-        outline, rounded,
+        color="white",
+        rounded,
         type="submit"
       )
 </template>
