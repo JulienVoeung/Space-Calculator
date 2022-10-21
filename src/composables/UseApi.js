@@ -1,6 +1,7 @@
 import useAuthUser from "src/composables/UseAuthUser";
 import useSupabase from "src/boot/supabase";
 import { state } from "src/stores/countersState";
+import { Notify } from 'quasar'
 
 export default function useAPI(letter) {
   const { supabase } = useSupabase();
@@ -13,17 +14,23 @@ export default function useAPI(letter) {
     .insert([
       { owner: user.value.id, name: letter, value: counterValue},
     ])
-    if (error.code == 23505){ // means if this counter already exists
-      const { data, error } = await supabase
-      .from('counters')
-      .update({ value: counterValue })
-      .eq('name', letter)
-      .eq('owner', user.value.id);
-      if (error) throw error;
+    if (error){
+      if (error.code == 23505){ // means if this counter already exists
+        const { data, error } = await supabase
+        .from('counters')
+        .update({ value: counterValue })
+        .eq('name', letter)
+        .eq('owner', user.value.id);
+        if (error) throw error;
+        Notify.create({message: `Counter '${letter}' has been successfully updated.`, group:"true", type:"positive", progress:true, closeBtn:false, timeout: 1000})
+        return;
+      }
+      else{
+        throw error;
+      }
     }
-    else{
-      throw error;
-    }
+    state.isSynced[letter] = true;
+    Notify.create({message: `Counter '${letter}' has been successfully synced with server.`, group:"true", type:"positive", progress:true, closeBtn:false, timeout: 1000})
   };
 
   const syncFromServer = async () => {

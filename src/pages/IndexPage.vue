@@ -31,7 +31,7 @@ q-page.column
       CreateImportCounter
     .row.justify-center.items-start.q-my-xl
       span.row.flex.flex-center(v-if="state.fetchResult.length > 0")
-        p {{ state.addCounter(state.fetchResult[0].name) }} {{ state.setVal(state.fetchResult[0].name, state.fetchResult[0].value) }} {{ state.fetchResult.shift() }}
+        p {{ state.addCounter(state.fetchResult[0].name, true) }} {{ state.setVal(state.fetchResult[0].name, state.fetchResult[0].value) }} {{ state.fetchResult.shift() }}
       span.row.flex.flex-center(v-for="val in keys")
         p(v-if="state.isRemoved.includes(val.toString())")
           // do nothing

@@ -1,7 +1,12 @@
 <script setup>
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref } from "vue";
 import { state } from "src/stores/countersState";
 import useSupabase from "src/boot/supabase";
+import useNotify from "src/composables/UseNotify";
+import useAuthUser from "src/composables/UseAuthUser";
+
+const { user } = useAuthUser();
+const { notifyError, notifySuccess } = useNotify();
 
 defineComponent({ name: "CreateCounter" });
 
@@ -13,11 +18,29 @@ const counterId = ref('');
 const counterNameInput = ref(null);
 
 const importCounter = async (counterId) => {
+    if (counterId == '') {
+      notifyError("You must specify a counter ID.");
+      return;
+    }
     const { data, error } = await supabase
     .from('counters')
     .select('*')
     .match({counter_id: counterId});
-    if (error) throw error;
+    if (error) {
+        if (error.code == "22P02") {
+              notifyError("This counter has not been found. Please verify the counter ID is correct.");
+              return;
+            }
+        else throw error;
+    }
+    if (data[0].owner == user.value.id){
+      notifyError("You cannot import your own counter.");
+      return;
+    }
+    if(state.isDisplayed.includes(data[0].name)){
+      notifyError("A counter with the name " + data[0].name + " already exists.");
+      return;
+    }
     state.addCounter(data[0].name);
     state.addShared(data[0].name);
     state.setVal(data[0].name, data[0].value);
@@ -45,7 +68,7 @@ function subscribe(counterName, counterId) {
         rounded,
         dense,
         no-caps,
-        color = "red",
+        color = "blue",
         size="0.9em",
         icon="add",
         label="Create a new counter",
@@ -67,7 +90,7 @@ function subscribe(counterName, counterId) {
         no-caps,
         color = "green",
         size="0.9em",
-        icon="sync",
+        icon="file_download",
         label="Import counter",
         @click = "importCounterDialog = true"
         )
