@@ -37,6 +37,10 @@ const importCounter = async (counterId) => {
       notifyError("You cannot import your own counter.");
       return;
     }
+    if(state.isDisplayed.includes(data[0].name)){
+      notifyError("A counter with the name " + data[0].name + " already exists.");
+      return;
+    }
     state.addCounter(data[0].name);
     state.addShared(data[0].name);
     state.setVal(data[0].name, data[0].value);
