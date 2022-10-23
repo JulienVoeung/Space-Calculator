@@ -16,7 +16,7 @@ const { supabase } = useSupabase();
 const { isSignedIn } = useAuthUser();
 
 // fetch all existing counters for the logged in user
-if (isSignedIn.value){
+if (isSignedIn.value) {
   state.fetchAllUserCounters(user.value.id, supabase);
 }
 
@@ -28,7 +28,8 @@ const keys = computed(() => Object.keys(state.counters));
 q-page.column
   div(v-if="user")
     span.row.flex.flex-center
-      CreateImportCounter
+      .createimportcounter
+        CreateImportCounter
     .row.justify-center.items-start.q-my-xl
       span.row.flex.flex-center(v-if="state.fetchResult.length > 0")
         p {{ state.addCounter(state.fetchResult[0].name, true) }} {{ state.setVal(state.fetchResult[0].name, state.fetchResult[0].value) }} {{ state.fetchResult.shift() }}

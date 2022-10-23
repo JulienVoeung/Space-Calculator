@@ -33,10 +33,14 @@ q-tabs.text-yellow-2(
   active-bg-color="blue-2"
   )
   .flex.flex-center
-    q-route-tab(label="Home", icon="home", to="/")
-    q-route-tab(v-if="!isSignedIn", label="Sign Up", icon="app_registration", to="/signUpPage")
-    q-route-tab(v-if="!isSignedIn", label="Sign In", icon="login", to="/signInPage")
+    .homebutton
+      q-route-tab(label="Home", icon="home", to="/")
+    .signupbutton
+      q-route-tab(v-if="!isSignedIn", label="Sign Up", icon="app_registration", to="/signUpPage")
+    .signinbutton
+      q-route-tab(v-if="!isSignedIn", label="Sign In", icon="login", to="/signInPage")
     template(v-if="isSignedIn")
+
       q-route-tab(label="Sign Out", icon="logout", to="/", @click="handleSignOut")
       q-tab(disable,:label="user.user_metadata.name", icon="person")
 </template>
