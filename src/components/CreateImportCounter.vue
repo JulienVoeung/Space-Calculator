@@ -82,27 +82,31 @@ function subscribe(counterName, counterId) {
               q-card-section
                 .text-h6 Counter name
               q-card-section.q-pt-none
-                q-input(v-model='counterName' autofocus=true @keyup.enter="state.addCounter(counterName) ; addCounterDialog = false")
+                .createcounternameinput
+                  q-input(v-model='counterName' autofocus=true @keyup.enter="state.addCounter(counterName) ; addCounterDialog = false")
               q-card-actions.text-primary(align='right')
                 q-btn(label='Confirm' @click="state.addCounter(counterName)" v-close-popup='')
     .column
-      q-btn.q-ma-xs.q-pa-md(
-        rounded,
-        dense,
-        no-caps,
-        color = "green",
-        size="0.9em",
-        icon="file_download",
-        label="Import counter",
-        @click = "importCounterDialog = true"
-        )
-        q-tooltip(anchor="bottom right").bg-teal Import counter
-        q-dialog(v-model='importCounterDialog' @before-hide="counterId=''")
-          q-card(style='min-width: 350px')
-            q-card-section
-              .text-h6 Counter ID
-            q-card-section.q-pt-none
-              q-input(v-model='counterId' autofocus=true @keyup.enter='importCounter(counterId); importCounterDialog = false')
-            q-card-actions.text-primary(align='right')
-              q-btn(label='Confirm' @click="importCounter(counterId)" v-close-popup='')
+      .import
+        q-btn.q-ma-xs.q-pa-md(
+          rounded,
+          dense,
+          no-caps,
+          color = "green",
+          size="0.9em",
+          icon="file_download",
+          label="Import counter",
+          @click = "importCounterDialog = true"
+          )
+          q-tooltip(anchor="bottom right").bg-teal Import counter
+          q-dialog(v-model='importCounterDialog' @before-hide="counterId=''")
+            q-card(style='min-width: 350px')
+              q-card-section
+                .text-h6 Counter ID
+              q-card-section.q-pt-none
+                .inputcounterid
+                  q-input(v-model='counterId' autofocus=true @keyup.enter='importCounter(counterId); importCounterDialog = false')
+              q-card-actions.text-primary(align='right')
+                .validatecounterid
+                  q-btn(label='Confirm' @click="importCounter(counterId)" v-close-popup='')
 </template>
