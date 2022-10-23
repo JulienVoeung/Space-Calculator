@@ -5,17 +5,17 @@ describe("E2E SPEC", () => {
 
   //test
   it("test authentification failed", () => {
-    cy.get("#RoutingTabs").find('[label="Sign In"]').click();
-    cy.get("#SignInComponent")
-      .find('[v-model="form.email"]')
-      .type("lionelrakotoarisoa@gmail.com")
-      .blur();
-    cy.get("#SignInComponent")
-      .find('[v-model="form.password"]')
-      .type("prout69latrik!")
-      .blur();
-    cy.get("#SignInComponent").should("contain", "Invalid login credentials");
+    cy.get("#login").click();
+    /*
+    cy.get("#q-field__native q-placeholder").type("voeung@et.esiea.fr");
+    cy.get("#q-field__native q-placeholder").type("azerty");
+    cy.get(
+      "#q-btn__content text-center col items-center q-anchor--skip justify-center row"
+    ).click();
+    //should("contain", "Invalid login credentials");
+    */
   });
+
   /*
   it("works on one counter", () => {
     const max = Math.floor(Math.random() * 19 + 1);
