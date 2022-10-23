@@ -3,9 +3,10 @@ describe("E2E SPEC", () => {
     cy.visit("http://localhost:9000");
   });
 
-  it("correctly adds a functional counter", () => {
+  it("correctly adds a functional counter and test responsiveness", () => {
     const max = Math.floor(Math.random() * 19 + 1);
     cy.get(".q-tab__label").contains("Sign In").click();
+    cy.get(".q-tab__label").contains("Sign In").should("be.visible");
     cy.get(".q-field__control-container")
       .find('[type="Email"]')
       .type("nenage1064@24rumen.com");
@@ -16,6 +17,7 @@ describe("E2E SPEC", () => {
     cy.get(".newcounter").find("button").click();
     cy.get(".q-field__control").find("input").type("A");
     cy.get(".q-card__actions").find("button").click();
+    cy.get(".q-card__actions").find("button").should("be.visible");
     for (let i = 0; i < max; i++) {
       cy.get(".increment").find("button").click();
     }
@@ -25,6 +27,17 @@ describe("E2E SPEC", () => {
     cy.get(".counternumber").find("input").should("have.value", 0);
     cy.get(".load").find("button").click();
     cy.get(".counternumber").find("input").should("have.value", max);
+
+    //begin the responsiveness test
+    cy.get(`.newcounter`).find("button").should("be.visible");
+    cy.get(`.q-field__control`).find("input").should("be.visible");
+    cy.get(`.increment`).find("button").should("be.visible");
+    cy.get(`.save`).find("button").should("be.visible");
+    cy.get(`.load`).find("button").should("be.visible");
+    cy.get(`.counternumber`).find("input").should("be.visible");
+    cy.get(`.deletecounter`).find("button").should("be.visible");
+    //end the responsiveness test
+
     cy.get(".deletecounter").find("button").click();
   });
 
