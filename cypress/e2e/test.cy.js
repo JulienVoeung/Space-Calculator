@@ -63,10 +63,10 @@ describe("E2E SPEC", () => {
     cy.get(".full-width").find('[type="submit"]').click();
     cy.get('[data-cy="importCounter"]').click();
     cy.get('[data-cy="importCounterInput"]').type(
-      "484596c2-ea07-44b3-8c77-302fa678a26d"
+      "f4c9e1b6-896c-4e84-8d1e-64f43d3af68c"
     );
     cy.get('[data-cy="importCounterInputValidate"]').click();
-    cy.get('[data-cy="input"]').should("have.value", 12);
+    cy.get('[data-cy="input"]').should("have.value", 6);
 
     cy.get('[data-cy="deleteCounter"]').click();
   });
