@@ -85,7 +85,8 @@ function subscribe(counterName, counterId) {
                 .createcounternameinput
                   q-input(v-model='counterName' autofocus=true @keyup.enter="state.addCounter(counterName) ; addCounterDialog = false")
               q-card-actions.text-primary(align='right')
-                q-btn(label='Confirm' @click="state.addCounter(counterName)" v-close-popup='')
+                .createcountervalidate
+                  q-btn(label='Confirm' @click="state.addCounter(counterName)" v-close-popup='')
     .column
       .import
         q-btn.q-ma-xs.q-pa-md(

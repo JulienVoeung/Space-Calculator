@@ -82,6 +82,29 @@ describe("E2E SPEC", () => {
     cy.get(".full-width").find('[type="submit"]').click();
     cy.url().should("be.equals", "http://localhost:9000/");
   });
+
+  it("should import from a created counter", () => {
+    const max = Math.floor(Math.random() * 19 + 1);
+    cy.get(".q-tab__label").contains("Sign In").click();
+    cy.get(".q-tab__label").contains("Sign In").should("be.visible");
+    cy.get(".q-field__control-container")
+      .find('[type="Email"]')
+      .type("nenage1064@24rumen.com");
+    cy.get(".q-field__control-container")
+      .find('[type="Password"]')
+      .type("testtest");
+    cy.get(".full-width").find('[type="submit"]').click();
+    cy.get(".newcounter").find("button").click();
+    cy.get(".createcounternameinput").find("input").type("A");
+    cy.get(".q-card__actions").find("button").click();
+    cy.get(".q-card__actions").find("button").should("be.visible");
+    for (let i = 0; i < max; i++) {
+      cy.get(".increment").find("button").click();
+    }
+    cy.get(".syncwithserver").find("button").click();
+    cy.get(".sharecounter").find("button").click();
+    //put the counter id in a variable here to import it later
+  });
 });
 
 /* nenage1064@24rumen.com:testtest */

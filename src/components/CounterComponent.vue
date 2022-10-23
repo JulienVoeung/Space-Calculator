@@ -26,7 +26,6 @@ const { syncToServer, getCounterId, deleteCounter, syncFromServer } =
 const alert = ref(false);
 
 const isSynced = computed(() => state.isSynced[id]);
-
 async function counterId(letter) {
   document.getElementById("counterIdField").innerHTML = await getCounterId(
     letter
