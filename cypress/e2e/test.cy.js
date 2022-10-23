@@ -3,6 +3,11 @@ describe("E2E SPEC", () => {
     cy.visit("http://localhost:9000");
   });
 
+// WARNING: ALL COUNTERS FROM TEST ACCOUNTS MUST BE DELETED BEFORE TO RUN TESTS
+
+/* nenage1064@24rumen.com:testtest */
+/* caladil264@24rumen.com:test2test2 */
+
   it("correctly adds a functional counter and test responsiveness", () => {
     const max = Math.floor(Math.random() * 19 + 1);
     cy.get(".q-tab__label").contains("Sign In").click();
@@ -14,31 +19,33 @@ describe("E2E SPEC", () => {
       .find('[type="Password"]')
       .type("testtest");
     cy.get(".full-width").find('[type="submit"]').click();
-    cy.get(".newcounter").find("button").click();
-    cy.get(".q-field__control").find("input").type("A");
-    cy.get(".q-card__actions").find("button").click();
-    cy.get(".q-card__actions").find("button").should("be.visible");
+    cy.get('[data-cy="newCounter"]').click();
+    cy.get('[data-cy="newCounterInput"]').type("A");
+    cy.get('[data-cy="newCounterInputValidate"]').click();
+    cy.get('[data-cy="newCounterInputValidate"]').should("be.visible");
     for (let i = 0; i < max; i++) {
-      cy.get(".increment").find("button").click();
+      cy.get('[data-cy="increment"]').click();
     }
-    cy.get(".counternumber").find("input").should("have.value", max);
-    cy.get(".save").find("button").click();
-    cy.get(".counternumber").find("button").click();
-    cy.get(".counternumber").find("input").should("have.value", 0);
-    cy.get(".load").find("button").click();
-    cy.get(".counternumber").find("input").should("have.value", max);
+    cy.get('[data-cy="input"]').should("have.value", max);
+    cy.get('[data-cy="saveToLocal"]').click();
+    cy.get('[data-cy="reset"]').click();
+    cy.get('[data-cy="input"]').should("have.value", 0);
+    cy.get('[data-cy="loadFromLocal"]').click();
+    cy.get('[data-cy="input"]').should("have.value", max);
 
     //begin the responsiveness test
-    cy.get(`.newcounter`).find("button").should("be.visible");
-    cy.get(`.q-field__control`).find("input").should("be.visible");
-    cy.get(`.increment`).find("button").should("be.visible");
-    cy.get(`.save`).find("button").should("be.visible");
-    cy.get(`.load`).find("button").should("be.visible");
-    cy.get(`.counternumber`).find("input").should("be.visible");
-    cy.get(`.deletecounter`).find("button").should("be.visible");
+    cy.get('[data-cy="newCounter"]').should("be.visible");
+    cy.get('[data-cy="newCounter"]').click();
+    cy.get('[data-cy="newCounterInput"]').type("A").should("be.visible");
+    cy.get('[data-cy="newCounterInputValidate"]').should("be.visible");
+    cy.get('[data-cy="newCounterInputValidate"]').click();
+    cy.get('[data-cy="saveToLocal"]').should("be.visible");
+    cy.get('[data-cy="loadFromLocal"]').should("be.visible");
+    cy.get('[data-cy="input"]').should("be.visible");
+    cy.get('[data-cy="deleteCounter"]').should("be.visible");
     //end the responsiveness test
 
-    cy.get(".deletecounter").find("button").click();
+    cy.get('[data-cy="deleteCounter"]').click();
   });
 
   it("correctly import a counter", () => {
@@ -51,12 +58,12 @@ describe("E2E SPEC", () => {
       .find('[type="Password"]')
       .type("testtest");
     cy.get(".full-width").find('[type="submit"]').click();
-    cy.get(".import").find("button").click();
-    cy.get(".inputcounterid")
-      .find("input")
-      .type("484596c2-ea07-44b3-8c77-302fa678a26d");
-    cy.get(".validatecounterid").find("button").click();
-    cy.get(".counternumber").find("input").should("have.value", 12);
+    cy.get('[data-cy="importCounter"]').click();
+    cy.get('[data-cy="importCounterInput"]').type("484596c2-ea07-44b3-8c77-302fa678a26d");
+    cy.get('[data-cy="importCounterInputValidate"]').click();
+    cy.get('[data-cy="input"]').should("have.value", 12);
+
+    cy.get('[data-cy="deleteCounter"]').click();
   });
 
   it("test where authentification failed", () => {
@@ -82,30 +89,4 @@ describe("E2E SPEC", () => {
     cy.get(".full-width").find('[type="submit"]').click();
     cy.url().should("be.equals", "http://localhost:9000/");
   });
-
-  it("should import from a created counter", () => {
-    const max = Math.floor(Math.random() * 19 + 1);
-    cy.get(".q-tab__label").contains("Sign In").click();
-    cy.get(".q-tab__label").contains("Sign In").should("be.visible");
-    cy.get(".q-field__control-container")
-      .find('[type="Email"]')
-      .type("nenage1064@24rumen.com");
-    cy.get(".q-field__control-container")
-      .find('[type="Password"]')
-      .type("testtest");
-    cy.get(".full-width").find('[type="submit"]').click();
-    cy.get(".newcounter").find("button").click();
-    cy.get(".createcounternameinput").find("input").type("A");
-    cy.get(".q-card__actions").find("button").click();
-    cy.get(".q-card__actions").find("button").should("be.visible");
-    for (let i = 0; i < max; i++) {
-      cy.get(".increment").find("button").click();
-    }
-    cy.get(".syncwithserver").find("button").click();
-    cy.get(".sharecounter").find("button").click();
-    //put the counter id in a variable here to import it later
-  });
 });
-
-/* nenage1064@24rumen.com:testtest */
-/* caladil264@24rumen.com:test2test2 */

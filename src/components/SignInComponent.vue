@@ -33,7 +33,6 @@ q-form.row.justify-center(@submit.prevent="handleSignIn")
   .col-md-4.col-sm-6.col-xs-10.q-gutter-y-md
     InputEmailComponent(v-model="form.email")
     InputPasswordComponent(v-model="form.password")
-    //- q-route-tab(v-if="!isSignedIn", label="Forgot my password", to="/ForgotPasswordPage")
     q-btn.bg-purple-9(
       label="Forgot my password",
       rounded,
@@ -41,7 +40,6 @@ q-form.row.justify-center(@submit.prevent="handleSignIn")
       to="ForgotPasswordPage"
     )
 
-    //- a(href='./ForgotPasswordPage') Forgot my password
     .full-width.q-pt-md
       q-btn.bg-purple-9.full-width(
         label="Sign In",
