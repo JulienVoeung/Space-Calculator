@@ -30,4 +30,28 @@ describe("E2E SPEC", () => {
       .find("input")
       .should("have.value", max);
   });
+
+  it("test where authentification failed", () => {
+    cy.get(".q-tab__label").contains("Sign In").click();
+    cy.get(".q-field__control-container")
+      .find('[type="Email"]')
+      .type("lionelrakotoarisoa@gmail.com");
+    cy.get(".q-field__control-container")
+      .find('[type="Password"]')
+      .type("prout");
+    cy.get(".full-width").find('[type="submit"]').click();
+    cy.url().should("be.equals", "http://localhost:9000/signInPage");
+  });
+
+  it("test where authentification validate", () => {
+    cy.get(".q-tab__label").contains("Sign In").click();
+    cy.get(".q-field__control-container")
+      .find('[type="Email"]')
+      .type("lionelrakotoarisoa@gmail.com");
+    cy.get(".q-field__control-container")
+      .find('[type="Password"]')
+      .type("prout69latrik");
+    cy.get(".full-width").find('[type="submit"]').click();
+    cy.url().should("be.equals", "http://localhost:9000/");
+  });
 });
